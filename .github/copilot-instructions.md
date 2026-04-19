@@ -1,0 +1,6 @@
+- Project: Next.js app using TypeScript, Tailwind CSS, Lucide React, and Framer Motion.
+- Workspace root: c:\Users\Administrator\Dating
+- Ensure app router, src directory, and app-tw template are used.
+- Dependencies installed: next, react, react-dom, tailwindcss, @tailwindcss/postcss, lucide-react, framer-motion.
+- Build verified with `npm run build`.
+- Continue with Hero + Navigation component development next.
