@@ -184,17 +184,21 @@ const ServicesGrid: FC = () => {
               <button onClick={() => setOpen(null)} className="absolute -top-4 -right-4 bg-amber-300 rounded-full w-10 h-10 flex items-center justify-center shadow">
                 <X className="w-4 h-4" />
               </button>
-              <h4 className="text-xl font-semibold text-charcoal mb-2">{products.find((x) => x.id === open)?.title}</h4>
-              <p className="text-charcoal/80 mb-4">{products.find((x) => x.id === open)?.desc}</p>
-              <div className="w-full h-64 rounded-lg overflow-hidden">
-                <Image
-                  src={products.find((x) => x.id === open)?.images[cardIndex[open ?? ""] ?? 0] as any}
-                  alt={products.find((x) => x.id === open)?.title}
-                  width={900}
-                  height={420}
-                  className="object-cover w-full h-full"
-                />
-              </div>
+              {(() => {
+                const selected = products.find((x) => x.id === open) as typeof products[number] | undefined;
+                const imgSrc = selected?.images[cardIndex[open ?? ""] ?? 0] ?? outfits1;
+                const title = selected?.title ?? "";
+                const desc = selected?.desc ?? "";
+                return (
+                  <>
+                    <h4 className="text-xl font-semibold text-charcoal mb-2">{title}</h4>
+                    <p className="text-charcoal/80 mb-4">{desc}</p>
+                    <div className="w-full h-64 rounded-lg overflow-hidden">
+                      <Image src={imgSrc as any} alt={title} width={900} height={420} className="object-cover w-full h-full" />
+                    </div>
+                  </>
+                );
+              })()}
             </div>
           </div>
         )}
