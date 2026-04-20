@@ -54,6 +54,18 @@ jobs:
           cd node-app
           npm ci --omit=dev
       
+      - name: Verify Next production build exists
+        run: |
+          cd node-app
+          if [ ! -d ".next" ]; then
+            echo ".next directory not found. Build may have failed or artifact path is wrong."
+            exit 1
+          fi
+          if [ ! -f ".next/standalone/server.js" ]; then
+            echo ".next/standalone/server.js not found. Standalone output may be missing."
+            exit 1
+          fi
+      
       - name: Login to Azure
         uses: azure/login@v2
         with:
