@@ -29,11 +29,26 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
+      - name: Debug build output
+        run: |
+          echo "WORKSPACE: $(pwd)"
+          ls -la
+          if [ -d ".next" ]; then
+            echo ".next contents:" && ls -la .next || true
+          else
+            echo ".next not found after build"
+          fi
+
+      - name: Package artifact for deployment job
+        run: |
+          rm -f node-app.tar.gz || true
+          tar -czf node-app.tar.gz .next package.json package-lock.json next.config.ts next-env.d.ts public || true
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .
+          path: node-app.tar.gz
 
   deploy:
     runs-on: ubuntu-latest
@@ -48,12 +63,26 @@ jobs:
         with:
           name: node-app
           path: node-app
-      
+
+      - name: Extract artifact
+        run: |
+          cd node-app
+          if [ -f node-app.tar.gz ]; then
+            tar -xzf node-app.tar.gz
+            rm node-app.tar.gz
+          else
+            echo "node-app.tar.gz not found in artifact; listing node-app:" && ls -la || true
+          fi
+
+      - name: Debug deployed layout
+        run: |
+          echo "listing node-app after extract:" && ls -la node-app || true
+
       - name: Install production dependencies for deploy
         run: |
           cd node-app
           npm ci --omit=dev
-      
+
       - name: Verify Next production build exists
         run: |
           cd node-app
