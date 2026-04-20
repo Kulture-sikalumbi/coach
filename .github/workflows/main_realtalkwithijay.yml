@@ -108,5 +108,5 @@ jobs:
         with:
           app-name: 'Realtalkwithijay'
           slot-name: 'Production'
-          package: .
+          package: ./node-app
           
